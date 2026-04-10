@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First Stop Cafe </title>
+  <meta name="description"
+    content="A mobile-first single-page website presenting the challenges, global-local mobility impact, and proposed digital solutions for First Stop Cafe." />
+  <style>
+    :root {
+      --bg: #f7f5f1;
+      --surface: rgba(255, 255, 255, 0.82);
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #5f5f5f;
+      --line: rgba(0, 0, 0, 0.08);
+      --brand: #203a2d;
+      --brand-soft: #e7f0eb;
+      --accent: #b97a3d;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+      --radius: 20px;
+      --radius-sm: 14px;
+      --header-h: 72px;
+      --max: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(185, 122, 61, 0.08), transparent 30%),
+        linear-gradient(180deg, #fbfaf8 0%, #f5f3ef 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 1000;
+      height: var(--header-h);
+      backdrop-filter: blur(14px);
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px 0 18px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .brand small {
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .brand strong {
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--brand);
+    }
+
+    .nav-desktop {
+      display: none;
+      gap: 18px;
+      align-items: center;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-desktop a:hover {
+      color: var(--brand);
+    }
+
+    .menu-btn {
+      appearance: none;
+      border: 0;
+      background: var(--brand);
+      color: white;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(32, 58, 45, 0.25);
+      flex-shrink: 0;
+    }
+
+    .menu-btn span,
+    .menu-btn span::before,
+    .menu-btn span::after {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: white;
+      border-radius: 10px;
+      position: relative;
+      transition: 0.25s ease;
+      content: "";
+    }
+
+    .menu-btn span::before {
+      position: absolute;
+      top: -6px;
+      left: 0;
+    }
+
+    .menu-btn span::after {
+      position: absolute;
+      top: 6px;
+      left: 0;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 94px;
+      left: 12px;
+      right: 12px;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: none;
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 14px;
+      border-radius: 14px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .mobile-menu a:hover {
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+
+    main {
+      padding-top: calc(var(--header-h) + 28px);
+      overflow: hidden;
+    }
+
+    .container {
+      width: min(calc(100% - 24px), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 18px 0 28px;
+    }
+
+    .hero-wrap {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(32, 58, 45, 0.95), rgba(56, 93, 73, 0.92));
+      color: white;
+      border-radius: 28px;
+      min-height: 78svh;
+      display: grid;
+      align-items: end;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .hero-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.45)),
+        url("./base-img.jpg") center/cover no-repeat;
+      z-index: -1;
+      transform: scale(1.02);
+    }
+
+    .hero-content {
+      padding: 28px 20px 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #f7efe7;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+      backdrop-filter: blur(8px);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 7vw, 4.4rem);
+      letter-spacing: -0.03em;
+      max-width: 12ch;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 54ch;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--brand);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: white;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .section {
+      padding: 14px 0 8px;
+    }
+
+    .section-head {
+      margin-bottom: 14px;
+      padding: 0 2px;
+    }
+
+    .section-head span {
+      color: var(--accent);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      margin-top: 6px;
+      color: var(--brand);
+    }
+
+    .section-head p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 64ch;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card h3 {
+      font-size: 1.08rem;
+      color: var(--brand);
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #343434;
+    }
+
+    .media-card {
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .media-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .media-card .inner {
+      padding: 18px;
+    }
+
+    .intro-layout,
+    .challenge-layout,
+    .mobility-layout,
+    .solution-layout,
+    .contact-layout {
+      display: grid;
+      gap: 16px;
+    }
+
+    .highlight {
+      background: linear-gradient(180deg, #f8faf7, #eef5f0);
+      border: 1px solid rgba(32, 58, 45, 0.08);
+    }
+
+    .stat-strip {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: #f8f7f3;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.4rem;
+      color: var(--brand);
+      margin-bottom: 4px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .proposal-band {
+      background: linear-gradient(135deg, #fff, #f3f6f4);
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(32, 58, 45, 0.08);
+    }
+
+    .stakeholder {
+      padding: 18px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .stakeholder h3 {
+      margin-bottom: 8px;
+    }
+
+    .contact-card {
+      background: linear-gradient(180deg, #203a2d, #2d4c3c);
+      color: white;
+    }
+
+    .contact-card h2,
+    .contact-card h3,
+    .contact-card p,
+    .contact-card a {
+      color: white;
+    }
+
+    .contact-links {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .contact-link {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 14px 16px;
+      border-radius: 16px;
+    }
+
+    .footer {
+      padding: 28px 0 34px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .spacer {
+      height: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .site-header {
+        left: 20px;
+        right: 20px;
+        padding: 0 20px 0 22px;
+      }
+
+      .nav-desktop {
+        display: flex;
+      }
+
+      .menu-btn,
+      .mobile-menu {
+        display: none !important;
+      }
+
+      .hero-content {
+        padding: 42px 36px 34px;
+      }
+
+      .intro-layout,
+      .challenge-layout,
+      .mobility-layout,
+      .solution-layout,
+      .contact-layout {
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: start;
+      }
+
+      .stat-strip {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .solution-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="#home" class="brand" aria-label="First Stop Cafe home">
+      <strong>First Stop Cafe</strong>
+      <small>Walthamstow</small>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Primary navigation">
+      <a href="#introduction">Introduction</a>
+      <a href="#challenges">Challenges</a>
+      <a href="#mobility">Mobility</a>
+      <a href="#solution">Solution</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+    </button>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="#introduction">Introduction</a>
+    <a href="#challenges">Challenges</a>
+    <a href="#mobility">Global-Local Mobility</a>
+    <a href="#solution">Proposed Solution</a>
+    <a href="#contact">Contact Us</a>
+  </nav>
+
+  <main>
+    <section class="hero container" id="home">
+      <div class="hero-wrap">
+        <div class="hero-content">
+          <div class="eyebrow">A simple mobile-first concept for a local hospitality business</div>
+          <h1>Helping First Stop Cafe grow with a smarter digital presence.</h1>
+          <div class="audio-player">
+            <button id="playAudioBtn" class="audio-btn" type="button">▶ Play Audio</button>
+            <audio id="pageAudio" preload="auto">
+              <source src="rec.mp3" type="audio/mpeg" />
+              Your browser does not support audio playback.
+            </audio>
+          </div>
+
+          <style>
+            .audio-player {
+              margin-top: 16px;
+            }
+
+            .audio-btn {
+              border: none;
+              background: #203a2d;
+              color: #fff;
+              padding: 12px 18px;
+              border-radius: 999px;
+              font-size: 14px;
+              font-weight: 600;
+              cursor: pointer;
+              box-shadow: 0 8px 20px rgba(32, 58, 45, 0.2);
+            }
+
+            .audio-btn:hover {
+              opacity: 0.95;
+            }
+          </style>
+
+          <script>
+            const playAudioBtn = document.getElementById("playAudioBtn");
+            const pageAudio = document.getElementById("pageAudio");
+
+            playAudioBtn.addEventListener("click", async () => {
+              try {
+                if (pageAudio.paused) {
+                  await pageAudio.play();
+                  playAudioBtn.textContent = "⏸ Pause Audio";
+                } else {
+                  pageAudio.pause();
+                  playAudioBtn.textContent = "▶ Play Audio";
+                }
+              } catch (error) {
+                console.error("Audio play failed:", error);
+              }
+            });
+
+            pageAudio.addEventListener("ended", () => {
+              playAudioBtn.textContent = "▶ Play Audio";
+            });
+          </script>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#introduction">Start Presentation</a>
+            <a class="btn btn-secondary" href="#solution">See the Solution</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="introduction">
+      <div class="section-head card highlight">
+        <span>01</span>
+        <h2>Introduction</h2>
+        <p>
+          First Stop Cafe is a small independent hospitality business based on High Street in Walthamstow, London. It is
+          known for affordable breakfast and lunch choices, a cosy atmosphere, and a menu that includes vegetarian and
+          vegan options. Because the business depends strongly on daily earnings, stable customer flow and efficient
+          operations are essential for its success.
+        </p>
+      </div>
+
+      <div class="intro-layout">
+        <article class="card highlight">
+          <h3>About the organisation</h3>
+          <p>
+            The purpose of this mobile website is to present First Stop Cafe as a local hospitality enterprise that
+            serves practical everyday meals in a busy market setting. Its location is a major advantage because
+            Walthamstow High Street attracts regular local visitors and outside visitors, yet that same environment also
+            creates pressure from competition, rising costs, and changing customer expectations. The business therefore
+            needs a solution that is simple to run, easy to host, affordable to maintain, and useful on mobile devices
+            for both customers and managers.
+          </p>
+        </article>
+
+        <article class="card media-card">
+          <img src="./first-page" alt="Cafe interior with food and drinks" />
+          <div class="inner">
+            <h3>Why this matters</h3>
+            <p>
+              A small hospitality enterprise can grow when it understands its local environment and responds quickly. A
+              mobile website gives the cafe a low-cost digital front door where customers can discover the menu, place
+              orders, view weather-ready updates, and connect with the business more easily.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="spacer"></div>
+    </section>
+
+    <section class="section container" id="challenges">
+      <div class="section-head">
+        <span>02</span>
+        <h2>Challenges experienced by First Stop Cafe</h2>
+        <p>
+          The main issues affecting the cafe are labour constraints, higher operational costs, stronger competition,
+          changing customer demand, and weather-related reductions in footfall. These are not isolated problems. They
+          influence staffing, sales, menu planning, and customer retention at the same time.
+        </p>
+      </div>
+
+      <div class="challenge-layout">
+        <article class="card">
+          <h3>Labour constraints and rising operating costs</h3>
+          <p>
+            Small hospitality businesses often rely on a small number of employees who work across multiple tasks. When
+            staff leave or when fewer people are available, the remaining team experiences more pressure. At the same
+            time, rising ingredient prices and general operating costs reduce profit margins. For First Stop Cafe, this
+            means that every day must be managed carefully, because even a slight drop in customer numbers can have a
+            noticeable financial effect.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Increased competition in a busy market area</h3>
+          <p>
+            Walthamstow is a lively commercial area with strong food competition. This helps attract visitors, but it
+            also means that customers can easily choose other cafes or food stalls. A local business that does not
+            communicate clearly online, update its offer, or build loyalty risks being overlooked even when its food and
+            service are strong.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Changing customer demand</h3>
+          <p>
+            Customers increasingly look for healthy choices, sustainable food options, fast service, and easy online
+            access. These preferences change quickly. When a small cafe depends only on manual observation, it becomes
+            difficult to identify the real patterns behind customer demand. This makes menu decisions slower and may
+            cause the business to miss opportunities that larger competitors capture sooner.
+          </p>
+        </article>
+
+        <article class="card media-card">
+          <img src="./weather.jpeg"
+            alt="Outdoor market street with food stalls and people" />
+          <div class="inner">
+            <h3>Weather problems</h3>
+            <p>
+              As an outdoor cafe, First Stop Cafe can lose passing trade during rain, heat, or uncomfortable outdoor
+              conditions. On those days, customers often make faster decisions and prefer businesses that communicate
+              availability, seating options, takeaway convenience, and ordering speed more clearly.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="mobility">
+      <div class="section-head">
+        <span>03</span>
+        <h2>Impact of global-local mobility on the organisation</h2>
+        <p>
+          Global-local mobility affects First Stop Cafe through tourism, migration, and customer movement throughout the
+          day. These patterns shape who visits the cafe, what they expect, and when they are most likely to buy.
+        </p>
+      </div>
+
+      <div class="mobility-layout">
+        <article class="card">
+          <h3>Tourism and visitor flow</h3>
+          <p>
+            Walthamstow High Street attracts visitors because of its long market and broad mix of food and retail
+            activity. This creates opportunities for the cafe to benefit from people who are exploring the area and
+            looking for quick, affordable meals. The challenge is that tourist and visitor numbers can be seasonal or
+            irregular. A mobile website can respond to this by presenting the cafe clearly to first-time visitors with
+            visible opening times, popular menu items, location information, and fast order pathways.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Migration and workforce value</h3>
+          <p>
+            Migration can strengthen entrepreneurship and improve the quality of service because workers from different
+            backgrounds bring varied food knowledge, service experience, and cultural understanding. For First Stop
+            Cafe, this can support menu innovation and improve customer connection. A digital platform can help capture
+            this value by turning staff knowledge into visible menu stories, daily specials, and customer-facing
+            recommendations.
+          </p>
+        </article>
+
+        <article class="card highlight">
+          <h3>Customer movement across the day</h3>
+          <p>
+            The cafe serves breakfast and lunch, which means customer traffic changes quickly between morning and
+            afternoon. This pattern influences staffing pressure, order timing, and stock use. A practical digital tool
+            can reduce uncertainty by allowing pre-orders before peak time, highlighting breakfast deals in the morning,
+            and switching promotions automatically to lunch offers later in the day.
+          </p>
+        </article>
+
+        <article class="card media-card">
+          <img src="./weather.webp"
+            alt="People walking near cafes and shops in a busy city street" />
+          <div class="inner">
+            <h3>Why mobility matters</h3>
+            <p>
+              Mobility is not only about people arriving from outside the area. It also includes the everyday movement
+              of local residents, workers, market visitors, and delivery users. A mobile website is effective because it
+              meets people while they are already moving.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="solution">
+      <div class="section-head">
+        <span>04</span>
+        <h2>Proposed solution</h2>
+        <p>
+          The most practical and innovative response is a lightweight mobile website that combines digital ordering,
+          real-time menu presentation, weather-aware service messaging, and local promotion. This approach keeps the
+          technology simple while solving everyday operational problems in a visible way.
+        </p>
+      </div>
+
+      <div class="proposal-band">
+        <div class="solution-layout">
+          <article class="card">
+            <h3>Digital integration through mobile ordering</h3>
+            <p>
+              The website should allow customers to browse breakfast and lunch items, view dietary tags such as
+              vegetarian and vegan, and place simple collection or delivery requests. A clear example would be a morning
+              commuter opening the site, choosing a vegan breakfast wrap, and collecting it without queueing. This
+              reduces pressure during peak hours, helps staff prepare in advance, and gives the cafe better visibility
+              over demand before rush periods begin.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Social media connection and menu upgrading</h3>
+            <p>
+              The website should connect directly with customer feedback and social promotion. For example, a weekly
+              “Healthy High Street Pick” could feature one affordable low-waste dish and one vegetarian special.
+              Customers could see the item on the website, follow a social post, and leave quick feedback after
+              purchase. This creates a low-cost feedback loop that helps the cafe respond to changing tastes more
+              confidently.
+            </p>
+          </article>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="solution-grid">
+          <article class="stakeholder">
+            <h3>Benefit for hospitality organisations</h3>
+            <p>
+              This solution gives a small business a practical digital presence without the cost and complexity of a
+              large custom platform. It improves customer access, supports menu testing, reduces queue pressure, and
+              creates a more predictable flow of orders. It also helps the business communicate value more clearly,
+              especially around affordability, healthy options, and convenience.
+            </p>
+          </article>
+
+          <article class="stakeholder">
+            <h3>Benefit for market managers</h3>
+            <p>
+              A stronger digital presence for one cafe can improve the wider market environment. When market traders and
+              cafes are easier to discover online, visitors spend more time in the area and can plan where to eat before
+              arrival. A market manager could use this approach as a model for promoting multiple independent traders
+              through a shared local digital culture.
+            </p>
+          </article>
+
+          <article class="stakeholder">
+            <h3>Benefit for the local council</h3>
+            <p>
+              The local council benefits when independent businesses become more resilient, attract footfall, and
+              strengthen local economic activity. A mobile-first digital system supports high street vitality, improves
+              access to local food options, and encourages sustainable local sourcing. It also creates a replicable
+              model for supporting small businesses across the borough without requiring expensive technology adoption.
+            </p>
+          </article>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="solution-layout">
+          <article class="card">
+            <h3>Cost optimisation through local sourcing</h3>
+            <p>
+              The website can include a short “locally sourced today” message to highlight ingredients bought nearby.
+              This is useful not only for brand trust but also for operational efficiency. For example, if the cafe buys
+              seasonal vegetables from nearby suppliers, it can lower transport-related costs, simplify replenishment,
+              and promote freshness at the same time.
+            </p>
+          </article>
+
+          <article class="card media-card">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80"
+              alt="Coffee and breakfast meal presented neatly on a table" />
+            <div class="inner">
+              <h3>Weather adaptation with smart communication</h3>
+              <p>
+                Instead of relying only on physical umbrellas and weatherproof furniture, the website can actively
+                support weather adaptation. On rainy days it can highlight collection orders, warm meals, and covered
+                seating messages. On hot days it can feature cold drinks, shaded seating notices, and lighter menu
+                options. This turns weather from a disruption into a managed service response.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="spacer"></div>
+
+        <article class="card highlight">
+          <h3>A realistic example of how the website works</h3>
+          <p>
+            A customer walking through Walthamstow High Street at 8:30 in the morning searches for breakfast nearby. The
+            site loads quickly on mobile, shows the cafe’s signature breakfast options, displays a message that
+            pre-orders are ready in ten minutes, and highlights one vegan option and one affordable meal deal. At lunch
+            time, the site automatically shifts its focus to lighter lunch meals and takeaway convenience. During rain,
+            the home screen changes to promote fast pickup and weather-ready seating. This simple digital behaviour
+            directly supports the cafe’s daily operations while improving the local market experience.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="contact">
+      <div class="contact-layout">
+        <article class="card contact-card">
+          <h2>Contact us</h2>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+
+          <div class="contact-links">
+            <a class="contact-link" href="mailto:hello@firststopcafe.co.uk">
+              <strong>Email</strong><br />
+              hello@firststopcafe.co.uk
+            </a>
+            <a class="contact-link" href="tel:+442012345678">
+              <strong>Phone</strong><br />
+              +44 20 1234 5678
+            </a>
+            <div class="contact-link">
+              <strong>Location</strong><br />
+              High Street, Walthamstow, London
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer container">
+      First Stop Cafe mobile proposal page. Built as a responsive single-page HTML concept for direct use.
+    </footer>
+  </main>
+
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const mobileLinks = mobileMenu.querySelectorAll("a");
+
+    menuBtn.addEventListener("click", () => {
+      const isOpen = mobileMenu.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      const clickedInsideMenu = mobileMenu.contains(e.target);
+      const clickedButton = menuBtn.contains(e.target);
+
+      if (!clickedInsideMenu && !clickedButton) {
+        mobileMenu.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  </script>
+</body>
+
+</html>
